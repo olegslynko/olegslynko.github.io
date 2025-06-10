@@ -6,7 +6,7 @@ function shuffle(array) {
   }
   return array;
 }
-
+let type=false;
 // Use RGB strings for consistent color comparisons.
 const cNew = "rgb(173, 216, 230)"; // Light blue (selected)
 const cAlt = "rgb(239, 239, 239)"; // Light gray (unselected)
@@ -15,9 +15,18 @@ function checkscore(check){
   let checkedhand="high card";
   //if 5 cards check for flush/straight/straight flush
   let straightflush=0;
+  let consecutive = 0;
   if (select.length==5) {
     //check straight
     const straightcheck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+      for (let i = 0; i < 25; i++) {
+    
+    if (numberscan(hand,straightcheck[i])) {
+      consecutive=consecutive+1;
+    }
+    else{consecutive=0;}
+    if (consecutive==5){straightflush++; checkedhand="straight";}
+  
     // check flush
    if (
     (select[0][2] === select[2][2]) &&
@@ -29,7 +38,7 @@ function checkscore(check){
     checkedhand = "flush";
 }
 
-    if(straightflush==2){checkedhand="straight flush"}
+    if(straightflush==2){checkedhand="straight flush";}
   }
   
   
@@ -56,10 +65,11 @@ suitnumbers.forEach(suit => {
 
 // Converts a card (a two-element array) to a readable string
 function cardFormat(card) {
-  const ranks = ['Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King'];
-  const suits = ['hearts', 'diamonds', 'spades', 'clubs'];
-  return `${ranks[card[0] - 1]} of ${suits[card[1] - 1]}`;
-}
+  let ranks = ['Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King'];
+  let suits = ['hearts', 'diamonds', 'spades', 'clubs'];
+  if (type==true){ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];suits=["♥️","♦️","♠️","♣️"]; 
+  return `${ranks[card[0] - 1]} ${suits[card[1] - 1]}`; }
+return `${ranks[card[0] - 1]} of ${suits[card[1] - 1]}`;}
 
 // --- UI Update functions ---
 // Update the button texts with the current hand and refresh selection tracking
@@ -164,6 +174,9 @@ document.getElementById("discard hand").addEventListener('click', () => {
   checkSelected();
   discardselected();
 });
+function numberscan (scanlist, target) {for (let i = 0; i < 5; i++) {
+   if ( scanlist[i][1]==target){return true;};
+    };return false;}
 
 // --- Initialization ---
 // (Optional) Shuffle deck once before starting
