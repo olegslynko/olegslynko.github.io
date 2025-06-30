@@ -1,4 +1,5 @@
-// --- Utility functions ---
+
+let select=[];
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -6,13 +7,19 @@ function shuffle(array) {
   }
   return array;
 }
+let checkedhand="high card ";
+let house=0;
 let type=false;
 // Use RGB strings for consistent color comparisons.
 const cNew = "rgb(173, 216, 230)"; // Light blue (selected)
 const cAlt = "rgb(239, 239, 239)"; // Light gray (unselected)
-let playedhands=[];
-function checkscore(check){
-  let checkedhand="high card";
+let playedhands=document.getElementById("hands");
+function checkscore(){
+  checkedhand="high card ";
+  
+  paircheck();
+  
+  
   //if 5 cards check for flush/straight/straight flush
   let straightflush=0;
   let consecutive = 0;
@@ -21,25 +28,31 @@ function checkscore(check){
     const straightcheck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
       for (let i = 0; i < 25; i++) {
     
-    if (numberscan(hand,straightcheck[i])) {
+    if (numberscan(select,straightcheck[i])) {
       consecutive=consecutive+1;
+      if (consecutive==5){straightflush++;checkedhand="straight "; i=25;}
     }
     else{consecutive=0;}
-    if (consecutive==5){straightflush++; checkedhand="straight";}
+      }
   
     // check flush
    if (
-    (select[0][2] === select[2][2]) &&
-    (select[2][2] === select[1][2]) &&
-    (select[3][2] === select[2][2]) &&
-    (select[4][2] === select[3][2]) 
+    (hand[select[0]][1] === hand[select[2]][1]) &&
+    (hand[select[2]][1] === hand[select[1]][1]) &&
+    (hand[select[3]][1] === hand[select[2]][1]) &&
+    (hand[select[4]][1] === hand[select[3]][1]) 
 ) {
     straightflush += 1;
-    checkedhand = "flush";
+    checkedhand = "flush ";
 }
-
-    if(straightflush==2){checkedhand="straight flush";}
+    if(house==2) {
+    checkedhand="full house "}
+    
+    
   }
+
+    if(straightflush==2){checkedhand="straight flush ";}
+  
   
   
   
@@ -54,7 +67,7 @@ const suitnumbers = [1, 2, 3, 4];
 const ranknumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 let deck = [];
 let hand = [];
-let select = [];
+
 
 // Build deck as an array of [rank, suit]
 suitnumbers.forEach(suit => {
@@ -67,19 +80,25 @@ suitnumbers.forEach(suit => {
 function cardFormat(card) {
   let ranks = ['Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King'];
   let suits = ['hearts', 'diamonds', 'spades', 'clubs'];
-  if (type==true){ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];suits=["♥️","♦️","♠️","♣️"]; 
-  return `${ranks[card[0] - 1]} ${suits[card[1] - 1]}`; }
+  if (type==true){ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];suits=["\u2665","\u2666","\u2660,","\u2663"]; }
 return `${ranks[card[0] - 1]} of ${suits[card[1] - 1]}`;}
 
 // --- UI Update functions ---
 // Update the button texts with the current hand and refresh selection tracking
 function update() {
 shuffle(deck);
-document.getElementById("play").textContent = `Play (${checkscore()})`;
+document.getElementById("play").textContent = `Play ${checkscore()}`;
   for (let i = 0; i < 7; i++) {
     let button = document.getElementById(`button${i}`);
     if (button) {
       button.textContent = hand[i] ? cardFormat(hand[i]) : "Empty";
+      if (hand[i][1]==3){button.style.color = "blue";
+} else if (hand[i][1]==1){button.style.color = "red";
+} else if (hand[i][1]==2){button.style.color = "orange";}
+else if(hand[i][1]==4){button.style.color = "gray";
+}
+ else {button.style.color = "black";
+}
     }
   }
   checkSelected();
@@ -114,8 +133,6 @@ function resetColours() {
 // --- Game Logic ---
 // Discard the selected cards and refill the hand from the deck
 function discardselected() {
-  console.log("Before discard:", hand);
-  console.log("Selected indices:", select);
 
   // Remove selected cards from hand (sort indices descending to avoid shifting issues)
   select.sort((a, b) => b - a);
@@ -143,6 +160,23 @@ function makecolor(currentColor) {
   return currentColor === cNew ? cAlt : cNew;
 }
 
+function paircheck(){
+  house=0;
+  let twopair=0;
+  let match =0;
+  if (select.length<0 && select.length<5){
+  for (let i=1; i<14; i++;){match=0;
+    for (let i=0; i<select.length; i++;){
+      if (hand[select[i]])
+   {match++;}
+    if (match ==2){twopair++; checkedhand="pair ";}
+    if (match==3){house++; checkedhand="three of a kind ";}
+      if (match==4){checkedhand="four of a kind ";}
+    }
+  }}
+  if( twopair=2){house++; checkedhand="two pair "; }
+}
+
 // --- Event Listeners ---
 // For each card button, toggle the selection color on click.
 for (let i = 0; i < 7; i++) {
@@ -158,11 +192,22 @@ for (let i = 0; i < 7; i++) {
     });
   }
 }
-
+function playhand() {
+  if (checkscore() === "invalid") {
+    return;
+  }
+  discardselected();
+  playedhands.textContent += checkscore();
+}
 // The "play" and "discard" buttons trigger discard logic:
-document.getElementById("play").addEventListener('click', discardselected);
+document.getElementById("play").addEventListener('click', playhand);
 document.getElementById("discard").addEventListener('click', discardselected);
-
+document.getElementById("style").addEventListener('click', () => {if (type==true)
+{type=false;
+update();}
+else{type=true;
+update();}} 
+);
 // The "discard hand" button selects all cards then discards:
 document.getElementById("discard hand").addEventListener('click', () => {
   for (let i = 0; i < 7; i++) {
@@ -175,8 +220,9 @@ document.getElementById("discard hand").addEventListener('click', () => {
   discardselected();
 });
 function numberscan (scanlist, target) {for (let i = 0; i < 5; i++) {
-   if ( scanlist[i][1]==target){return true;};
-    };return false;}
+   if ( hand[scanlist[i]][0]==target){return true;}
+    }return false;}
+    
 
 // --- Initialization ---
 // (Optional) Shuffle deck once before starting
