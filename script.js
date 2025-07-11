@@ -164,17 +164,17 @@ function paircheck(){
   house=0;
   let twopair=0;
   let match =0;
-  if (select.length<0 && select.length<5){
-  for (let i=1; i<14; i++;){match=0;
-    for (let i=0; i<select.length; i++;){
-      if (hand[select[i]])
-   {match++;}
-    if (match ==2){twopair++; checkedhand="pair ";}
-    if (match==3){house++; checkedhand="three of a kind ";}
-      if (match==4){checkedhand="four of a kind ";}
+  if (select.length>0 && select.length<5){
+  for (let i=1; i<14; i++){match=0;
+    for (let j=0; j<select.length; j++){
+      if (i===hand[select[j]])
+   {match++;
+    if (match ===2){twopair++; checkedhand="pair ";}
+    if (match===3){house++; checkedhand="three of a kind ";}
+      if (match===4){checkedhand="four of a kind ";}}
     }
   }}
-  if( twopair=2){house++; checkedhand="two pair "; }
+  if( twopair===2){house++; checkedhand="two pair ";}
 }
 
 // --- Event Listeners ---
@@ -230,3 +230,4 @@ shuffle(deck);
 hand = deck.splice(0, 7);
 update();
 resetColours();
+
