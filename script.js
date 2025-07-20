@@ -7,7 +7,7 @@ function shuffle(array) {
   }
   return array;
 }
-let checkedhand="high card ";
+let checkedhand= " ";
 let house=0;
 let type=false;
 // Use RGB strings for consistent color comparisons.
@@ -17,7 +17,7 @@ let playedhands=document.getElementById("hands");
 function checkscore(){
   checkedhand="high card ";
   
-  paircheck();
+  house = paircheck();
   
   
   //if 5 cards check for flush/straight/straight flush
@@ -45,12 +45,12 @@ function checkscore(){
     straightflush += 1;
     checkedhand = "flush ";
 }
-    if(house==2) {
-    checkedhand="full house "}
+    
     
     
   }
-
+if(house>1) {
+    checkedhand="full house "}
     if(straightflush==2){checkedhand="straight flush ";}
   
   
@@ -64,7 +64,7 @@ if (select.length < 1 || select.length > 5) {
 }
 // --- Card and Deck setup ---
 const suitnumbers = [1, 2, 3, 4];
-const ranknumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const ranknumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ];
 let deck = [];
 let hand = [];
 
@@ -111,13 +111,13 @@ function checkSelected() {
     let button = document.getElementById(`button${i}`);
     if (button) {
       // Log the computed background color for debugging
-      console.log(`Button ${i} color:`, button.style.backgroundColor);
+      
       if (button.style.backgroundColor === cNew) {
         select.push(i);
       }
     }
   }
-  console.log("Selected indices:", select);
+ 
 }
 
 // Reset all button background colors to unselected (cAlt)
@@ -130,11 +130,9 @@ function resetColours() {
   }
 }
 
-// --- Game Logic ---
-// Discard the selected cards and refill the hand from the deck
 function discardselected() {
 
-  // Remove selected cards from hand (sort indices descending to avoid shifting issues)
+
   select.sort((a, b) => b - a);
   select.forEach(index => {
     if (index >= 0 && index < hand.length) {
@@ -142,7 +140,7 @@ function discardselected() {
     }
   });
 
-  // Refill hand until there are 7 cards (if deck isn’t empty)
+ 
   while (hand.length < 7 && deck.length > 0) {
     hand.push(deck.shift());
   }
@@ -152,29 +150,34 @@ function discardselected() {
   update();
   resetColours();
 
-  console.log("After discard:", hand);
 }
 
 // Toggle color: if already selected, unselect; if not, select.
 function makecolor(currentColor) {
   return currentColor === cNew ? cAlt : cNew;
 }
-
+function getcard (cardnumber){return hand[select[cardnumber]];}
 function paircheck(){
-  house=0;
+  let houseb=0;
   let twopair=0;
   let match =0;
   if (select.length>0 && select.length<5){
-  for (let i=1; i<14; i++){match=0;
+  for (let i=1; i<14; i++){
+    match=0;
     for (let j=0; j<select.length; j++){
-      if (i===hand[select[j]])
-   {match++;
-    if (match ===2){twopair++; checkedhand="pair ";}
-    if (match===3){house++; checkedhand="three of a kind ";}
-      if (match===4){checkedhand="four of a kind ";}}
+      if (i===getcard(j)[0])
+   {                          match++;
+                                                if (match ===2){twopair++; checkedhand="pair ";}
+                                              if (match===3){houseb=houseb+1; checkedhand="three of a kind ";}
+                                        if (match===4){checkedhand="four of a kind ";}}
     }
   }}
-  if( twopair===2){house++; checkedhand="two pair ";}
+  console.log(houseb);
+if (twopair === 2) {
+  houseb++;
+  checkedhand = "two pair ";
+}
+  return houseb;
 }
 
 // --- Event Listeners ---
@@ -230,4 +233,3 @@ shuffle(deck);
 hand = deck.splice(0, 7);
 update();
 resetColours();
-
