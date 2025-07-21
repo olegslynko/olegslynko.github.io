@@ -17,7 +17,7 @@ let playedhands=document.getElementById("hands");
 function checkscore(){
   checkedhand="high card ";
   
-  house = paircheck();
+  paircheck();
   
   
   //if 5 cards check for flush/straight/straight flush
@@ -158,26 +158,26 @@ function makecolor(currentColor) {
 }
 function getcard (cardnumber){return hand[select[cardnumber]];}
 function paircheck(){
-  let houseb=0;
+  house=0;
   let twopair=0;
   let match =0;
-  if (select.length>0 && select.length<5){
+  if (select.length>0 && select.length<6){
   for (let i=1; i<14; i++){
     match=0;
-    for (let j=0; j<select.length; j++){
-      if (i===getcard(j)[0])
+              for (let j=0; j<select.length; j++){
+            if (i===getcard(j)[0])
    {                          match++;
                                                 if (match ===2){twopair++; checkedhand="pair ";}
-                                              if (match===3){houseb=houseb+1; checkedhand="three of a kind ";}
+                                              if (match===3){house=house+1; checkedhand="three of a kind ";}
                                         if (match===4){checkedhand="four of a kind ";}}
     }
   }}
-  console.log(houseb);
+  
 if (twopair === 2) {
-  houseb++;
+  house=house+1;
   checkedhand = "two pair ";
 }
-  return houseb;
+console.log(house);
 }
 
 // --- Event Listeners ---
