@@ -166,7 +166,7 @@ function paircheck(){
     match=0;
               for (let j=0; j<select.length; j++){
             if (i===getcard(j)[0])
-   {                          match++;
+   {                          match++; console.log(match);
                                                 if (match ===2){twopair++; checkedhand="pair ";}
                                               if (match===3){house=house+1; checkedhand="three of a kind ";}
                                         if (match===4){checkedhand="four of a kind ";}}
