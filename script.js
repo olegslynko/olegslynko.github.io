@@ -198,9 +198,10 @@ for (let i = 0; i < 7; i++) {
 function playhand() {
   if (checkscore() === "invalid") {
     return;
-  }
-  discardselected();
+  } 
   playedhands.textContent += checkscore();
+  discardselected();
+ 
 }
 // The "play" and "discard" buttons trigger discard logic:
 document.getElementById("play").addEventListener('click', playhand);
