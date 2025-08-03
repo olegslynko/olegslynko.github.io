@@ -166,7 +166,7 @@ function paircheck(){
     match=0;
               for (let j=0; j<select.length; j++){
             if (i===getcard(j)[0])
-   {                          match++; console.log(match);
+   {                          match++;
                                                 if (match ===2){twopair++; checkedhand="pair ";}
                                               if (match===3){house=house+1; checkedhand="three of a kind ";}
                                         if (match===4){checkedhand="four of a kind ";}}
@@ -198,10 +198,9 @@ for (let i = 0; i < 7; i++) {
 function playhand() {
   if (checkscore() === "invalid") {
     return;
-  } 
-  playedhands.textContent += checkscore();
+  }playedhands.textContent += checkscore();
   discardselected();
- 
+  
 }
 // The "play" and "discard" buttons trigger discard logic:
 document.getElementById("play").addEventListener('click', playhand);
