@@ -80,7 +80,7 @@ suitnumbers.forEach(suit => {
 function cardFormat(card) {
   let ranks = ['Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King'];
   let suits = ['hearts', 'diamonds', 'spades', 'clubs'];
-  if (type==true){ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];suits=["\u2665","\u2666","\u2660,","\u2663"]; }
+  if (type==true){ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];suits=["\u2665","\u2666","\u2660,","\u2663"];return `${ranks[card[0] - 1]} ${suits[card[1] - 1]}`;} }
 return `${ranks[card[0] - 1]} of ${suits[card[1] - 1]}`;}
 
 // --- UI Update functions ---
