@@ -79,9 +79,9 @@ suitnumbers.forEach(suit => {
 // Converts a card (a two-element array) to a readable string
 function cardFormat(card) {
   let ranks = ['Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King'];
-  let suits = ['hearts', 'diamonds', 'spades', 'clubs'];
-  if (type==true){ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];suits=["\u2665","\u2666","\u2660,","\u2663"];return `${ranks[card[0] - 1]} ${suits[card[1] - 1]}`;} }
-return `${ranks[card[0] - 1]} of ${suits[card[1] - 1]}`;}
+  let suits = ['of hearts', 'of diamonds', 'of spades', 'of clubs'];
+  if (type==true){ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];suits=["\u2665","\u2666","\u2660,","\u2663"];} 
+return `${ranks[card[0] - 1]} ${suits[card[1] - 1]}`;}
 
 // --- UI Update functions ---
 // Update the button texts with the current hand and refresh selection tracking
